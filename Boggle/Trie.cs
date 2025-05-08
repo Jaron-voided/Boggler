@@ -1,9 +1,21 @@
+using System.Reflection.Metadata;
+
 namespace Boggle;
 
 public class Trie
 {
     private readonly TrieNode _root = new TrieNode();
 
+
+    public void Traverse(char c)
+    {
+        if (_root.HasChild(c))
+        {
+            // ????
+        }
+    }
+    
+    
     public static Trie CreateBoggleTrie(IEnumerable<string> words)
     {
         // Create a trie containing Boggle Words
@@ -37,4 +49,6 @@ public class Trie
         // once finishing through the nodes for the word, clarify this is a word
         node.IsWord = true;
     }
+    
+    
 }

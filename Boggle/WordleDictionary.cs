@@ -1,26 +1,26 @@
+using System.Text.Json;
 using System.Transactions;
 
 namespace Boggle;
 
 public class WordleDictionary
 {
-    internal HashSet<string> Words = new HashSet<string>();
+    internal List<string> Words = new List<string>();
     
     public WordleDictionary GetWordleDictionary()
     {
-        WordleDictionary wordleDictionary = new WordleDictionary();
-        
         string filePath = "dictionary.json";
-        
         string fileContent = File.ReadAllText(filePath);
 
-        HashSet<string> wordList = fileContent.Split(',')
-            .Select(word => word.Replace("\"", "").Trim())
-            .Where(word => !string.IsNullOrEmpty(word) && word.Length <= 16)
-            .Distinct()
-            .ToHashSet();
+        List<string> wordList = JsonSerializer.Deserialize<List<string>>(fileContent);
 
-        wordleDictionary.Words = wordList;
+        WordleDictionary wordleDictionary = new WordleDictionary
+        {
+            Words = wordList
+                .Where(word => !string.IsNullOrEmpty(word) && word.Length <= 16 && word.Length > 2)
+                .ToList()
+        };
+        
         return wordleDictionary;
     }
 
@@ -31,7 +31,7 @@ public class WordleDictionary
             
         prunedDictionary.Words = mainDictionary.Words    
             .Where(w => w.StartsWith(die.SelectedFace))
-            .ToHashSet();
+            .ToList();
         return prunedDictionary;
     }
     

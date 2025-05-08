@@ -1,6 +1,6 @@
 namespace Boggle;
 
-public class Utils
+public class DiceFaces
 {
     public static readonly List<string[]> BoggleDiceFaces = new()
     {

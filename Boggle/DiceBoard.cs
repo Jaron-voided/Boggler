@@ -1,10 +1,13 @@
 using System.Text;
+using Boggle.Utils;
 
 namespace Boggle;
 
 public class DiceBoard
 {
     internal BoggleDie[,] Board = new BoggleDie[4, 4];
+    
+    internal Position CurrentPosition { get; set; } =  new Position(0, 0);
     
     private readonly BoggleDice _boggleDice;
     
@@ -14,6 +17,11 @@ public class DiceBoard
         _boggleDice = boggleDice;
     }
 
+    internal void MoveSpot(Direction direction)
+    {
+        CurrentPosition.Add(direction);
+    }
+    
     internal DiceBoard MakeBoard()
     {
         DiceBoard newBoard =  new DiceBoard(_boggleDice);

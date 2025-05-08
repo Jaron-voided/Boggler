@@ -12,7 +12,7 @@ public class BoggleDice
     {
         BoggleDice dice = new BoggleDice();
         var index = 0;
-        foreach (String[] face in Utils.BoggleDiceFaces)
+        foreach (String[] face in DiceFaces.BoggleDiceFaces)
         {
             BoggleDie die = BoggleDie.CreateDie(face);
             Dice.Add(die);
