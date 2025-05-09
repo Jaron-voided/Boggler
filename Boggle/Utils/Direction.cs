@@ -2,6 +2,7 @@ namespace Boggle;
 
 public class Direction
 {
+    private const int boardSize = 4;
     public int DX { get; }
     public int DY { get; }
     private Direction(int dx, int dy)
@@ -25,7 +26,7 @@ public class Direction
         UpLeft, UpRight, DownLeft, DownRight
     };
     
-    internal IEnumerable<Direction> GetPossibleDirections(int x, int y)
+    internal IEnumerable<Direction> EnumerateDirections(int x, int y, bool[] visited)
     {
         List<Direction> directions = Direction.All.ToList();
 

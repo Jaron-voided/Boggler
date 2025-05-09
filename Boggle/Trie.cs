@@ -5,13 +5,13 @@ namespace Boggle;
 public class Trie
 {
     private readonly TrieNode _root = new TrieNode();
-
-
+    public TrieNode CurrentNode { get; set; }
+    
     public void Traverse(char c)
     {
-        if (_root.HasChild(c))
+        if (CurrentNode.HasChild(c))
         {
-            // ????
+            CurrentNode = CurrentNode.Children[c];
         }
     }
     
@@ -20,9 +20,9 @@ public class Trie
     {
         // Create a trie containing Boggle Words
         Trie boggleTrie = new Trie();
+        boggleTrie.CurrentNode = boggleTrie._root;
         foreach (string word in words)
             boggleTrie.Insert(word);
-        
         return boggleTrie;
     }
 

@@ -11,8 +11,8 @@ public class BoggleDice
     internal BoggleDice CreateDice()
     {
         BoggleDice dice = new BoggleDice();
-        var index = 0;
-        foreach (String[] face in DiceFaces.BoggleDiceFaces)
+        //var index = 0;
+        foreach (string[] face in DiceFaces.BoggleDiceFaces)
         {
             BoggleDie die = BoggleDie.CreateDie(face);
             Dice.Add(die);

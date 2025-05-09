@@ -2,7 +2,7 @@ namespace Boggle;
 
 public struct BoggleDie
 {
-    internal String[] Faces { get; set; }
+    internal string[] Faces { get; set; }
     public string SelectedFace { get; private set; }
     
     public BoggleDie() { }
@@ -12,7 +12,7 @@ public struct BoggleDie
         SelectedFace = Faces[rng.Next(0, Faces.Length)];
     }
     
-    internal static BoggleDie CreateDie(String[] faces)
+    internal static BoggleDie CreateDie(string[] faces)
     {
         BoggleDie die = new BoggleDie();
         die.Faces = faces;
@@ -21,6 +21,6 @@ public struct BoggleDie
 
     public override string ToString()
     {
-        return SelectedFace ?? "?";
+        return SelectedFace.ToString() ?? "?";
     }
 }
