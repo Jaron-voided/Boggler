@@ -26,7 +26,7 @@ public class Direction
         UpLeft, UpRight, DownLeft, DownRight
     };
     
-    internal IEnumerable<Direction> EnumerateDirections(int x, int y, bool[] visited)
+    internal static IEnumerable<Direction> EnumerateDirections(int x, int y)
     {
         List<Direction> directions = Direction.All.ToList();
 

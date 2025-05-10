@@ -8,7 +8,7 @@ public class DiceBoard
     private static int BoardSize = 4;
     private BoggleDie[,] Board = new BoggleDie[BoardSize, BoardSize];
     private Position CurrentPosition { get; set; } =  new Position(0, 0);
-    private bool[,] _visited = new bool[4,4];
+    private VisitHistory History { get; set; } = new VisitHistory();
     
     private readonly BoggleDice _boggleDice;
     
@@ -17,44 +17,99 @@ public class DiceBoard
         _boggleDice = boggleDice;
     }
 
-    internal List<string> CheckBoardForWords(Trie trie)
+    internal HashSet<string> CheckBoardForWords(Trie trie)
     {
-        List<string> results = new List<string>();
-        List<char> letters = new List<char>();
+        HashSet<string> results = new HashSet<string>();
+        results = IterateBoard(trie);
+
+        return results;
+    }
+
+    internal HashSet<string> IterateBoard(Trie trie)
+    {
+        HashSet<string> results = new HashSet<string>();
+
         for (var i = 0; i < BoardSize; i++)
         {
             for (var j = 0; j < BoardSize; j++)
             {
                 if (CheckSpot(trie,i, j))
                 {
-                    CurrentPosition = new Position(i, j);
-                    _visited[i, j] = true;
-                    string letter = Board[CurrentPosition.X, CurrentPosition.Y].SelectedFace;
-                    if (letter.ToUpper() == "QU")
-                    {
-                        // If letters are QU add them seperately
-                        letters.Add('Q');
-                        letters.Add('U');
-                    }
-                    else
-                    {
-                        // If not add the letter
-                        letters.Add(Board[CurrentPosition.X, CurrentPosition.Y].SelectedFace[0]);
-                    }
-
-                    if (trie.CurrentNode.IsWord)
-                    {
-                        string word = new string(letters.ToArray());
-                        results.Add(word);
-                    }
+                    HashSet<string> newWords = ExplorePath(trie, i, j);
+                    results.UnionWith(newWords);
                 }
-                // I need to clear the word eventually, but I want to keep going
-                // so if the next word is Catastrophe, I already have Cat
             }
         }
 
         return results;
     }
+
+    internal HashSet<string> ExplorePath(Trie trie, int i, int j)
+    {
+        char[] word = new char[16];
+        int count = 0;
+        HashSet<string> foundWords = new HashSet<string>();
+        CurrentPosition = new Position(i, j);
+        History.Visit(i, j);
+        var directions = Direction.EnumerateDirections(i, j);
+        foreach (var direction in directions)
+        {
+            CurrentPosition.Add(direction);
+            if (CheckSpot(trie, CurrentPosition.X, CurrentPosition.Y))
+            {
+                string letters = Board[i, j].SelectedFace;
+                char letter = Tools.QuToQ(letters);
+                trie.Traverse(letter);
+                Tools.AddLettersToWord(word, letter);
+                count++;
+                if (trie.CurrentNode.IsWord)
+                    foundWords.Add(new string(word));
+            }
+            ExplorePath(trie, i, j, count, word, foundWords);
+        }
+        return foundWords;
+    }
+
+    internal HashSet<string> ExplorePath(Trie trie, int i, int j, int count, char[] word, HashSet<string> foundWords)
+    {
+        CurrentPosition = new Position(i, j);
+        History.Visit(i, j);
+        var directions = Direction.EnumerateDirections(i, j);
+        foreach (var direction in directions)
+        {
+            CurrentPosition.Add(direction);
+            if (CheckSpot(trie, CurrentPosition.X, CurrentPosition.Y))
+            {
+                string letters = Board[i, j].SelectedFace;
+                char letter = Tools.QuToQ(letters);
+                trie.Traverse(letter);
+                Tools.AddLettersToWord(word, letter);
+                count++;
+                if (trie.CurrentNode.IsWord)
+                    foundWords.Add(new string(word));
+            }
+            ExplorePath(trie, i, j, count, word, foundWords);
+        }
+        
+        return foundWords;
+    }   
+    
+    /*
+    internal List<string> ExplorePath(Trie trie, int i, int j)
+    {
+        CurrentPosition = new Position(i, j);
+        _visited[i, j] = true;
+        var directions = Direction.EnumerateDirections(i, j, _visited);
+        foreach (var direction in directions)
+        {
+            CurrentPosition.Add(direction);
+            if (CheckSpot(trie, CurrentPosition.X, CurrentPosition.Y))
+            {
+                trie.
+            }
+        }
+    }
+    */
 
     internal bool CheckSpot(Trie trie, int x = 0, int y = 0)
     {
