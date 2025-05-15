@@ -2,9 +2,14 @@
 
 using Boggle;
 
-BoggleDice _dice = new BoggleDice();
-DiceBoard _board = new DiceBoard(_dice);
+DiceBoard board = DiceBoard.MakeBoard();
+// Creates a board with random dice
+WordleDictionary dict = WordleDictionary.GetWordleDictionary();
+Trie trie = Trie.CreateBoggleTrie(dict.Words);
+HashSet<string> playableWords = board.CheckBoardForWords(trie);
 
-_board.MakeBoard();
-Console.WriteLine(_board);
+foreach (string word in playableWords)
+{
+    Console.WriteLine(word);
+}
 

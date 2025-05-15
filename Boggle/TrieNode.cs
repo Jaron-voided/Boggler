@@ -20,9 +20,14 @@ public class TrieNode
     }
     public TrieNode AddChild(char c)
     {
-        if (Children.All(child => child.Letter != c))
-            Children[c] = CreateNode(c);
+        int index = c - 'A';
+        if (Children[index] == null)
+            Children[index] = CreateNode(c);
+
+        return Children[index];
+//        if (Children.All(child => child.Letter != c))
+  //          Children[c] = CreateNode(c);
         
-        return Children[c];
+    //    return Children[c];
     }
 }

@@ -7,9 +7,9 @@ public class WordleDictionary
 {
     internal List<string> Words = new List<string>();
     
-    public WordleDictionary GetWordleDictionary()
+    public static WordleDictionary GetWordleDictionary()
     {
-        string filePath = "dictionary.json";
+        string filePath = "/home/zeref-dragneel/Desktop/Boggle/Boggle/dictionary.json";
         string fileContent = File.ReadAllText(filePath);
 
         List<string> wordList = JsonSerializer.Deserialize<List<string>>(fileContent);
@@ -18,7 +18,9 @@ public class WordleDictionary
         {
             Words = wordList
                 .Where(word => !string.IsNullOrEmpty(word) && word.Length <= 16 && word.Length > 2)
+                .Select(word => word.ToUpper())
                 .ToList()
+                
         };
         
         return wordleDictionary;

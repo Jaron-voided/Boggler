@@ -11,8 +11,8 @@ public class DiceBoard
     private VisitHistory History { get; set; } = new VisitHistory();
     
     private readonly BoggleDice _boggleDice;
-    
-    internal DiceBoard(BoggleDice boggleDice)
+
+    private DiceBoard(BoggleDice boggleDice)
     {
         _boggleDice = boggleDice;
     }
@@ -25,7 +25,7 @@ public class DiceBoard
         return results;
     }
 
-    internal HashSet<string> IterateBoard(Trie trie)
+    private HashSet<string> IterateBoard(Trie trie)
     {
         HashSet<string> results = new HashSet<string>();
 
@@ -44,7 +44,7 @@ public class DiceBoard
         return results;
     }
 
-    internal HashSet<string> ExplorePath(Trie trie, int i, int j)
+    private HashSet<string> ExplorePath(Trie trie, int i, int j)
     {
         char[] word = new char[16];
         int count = 0;
@@ -54,7 +54,7 @@ public class DiceBoard
         var directions = Direction.EnumerateDirections(i, j);
         foreach (var direction in directions)
         {
-            CurrentPosition.Add(direction);
+            CurrentPosition = CurrentPosition.Add(direction);
             if (CheckSpot(trie, CurrentPosition.X, CurrentPosition.Y))
             {
                 string letters = Board[i, j].SelectedFace;
@@ -65,19 +65,19 @@ public class DiceBoard
                 if (trie.CurrentNode.IsWord)
                     foundWords.Add(new string(word));
             }
-            ExplorePath(trie, i, j, count, word, foundWords);
+            ExplorePath(trie, CurrentPosition.X, CurrentPosition.Y, count, word, foundWords);
         }
         return foundWords;
     }
 
-    internal HashSet<string> ExplorePath(Trie trie, int i, int j, int count, char[] word, HashSet<string> foundWords)
+    private HashSet<string> ExplorePath(Trie trie, int i, int j, int count, char[] word, HashSet<string> foundWords)
     {
         CurrentPosition = new Position(i, j);
         History.Visit(i, j);
         var directions = Direction.EnumerateDirections(i, j);
         foreach (var direction in directions)
         {
-            CurrentPosition.Add(direction);
+            CurrentPosition = CurrentPosition.Add(direction);
             if (CheckSpot(trie, CurrentPosition.X, CurrentPosition.Y))
             {
                 string letters = Board[i, j].SelectedFace;

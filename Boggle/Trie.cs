@@ -9,9 +9,12 @@ public class Trie
     
     public void Traverse(char c)
     {
+        int index = c - 'A';
+
         if (CurrentNode.HasChild(c))
         {
-            CurrentNode = CurrentNode.Children[c];
+            CurrentNode = CurrentNode.Children[index];
+            //CurrentNode = CurrentNode.Children[c];
         }
     }
     
@@ -30,20 +33,25 @@ public class Trie
     {
         // Start at the root
         var node = _root;
-        
+        word = word.ToUpper();
+
         foreach (char c in word)
         {
+            int index = c - 'A';
             // If that node doesn't exist already    
             // It could already exist from a different word
             if (!node.HasChild(c))
             {
                 // create it
-                node.Children[c] = node.AddChild(c);
+                node.AddChild(c);
+                //node.Children[c] = node.AddChild(c);
             }
             
             // move from root(or current node) to the new node
             // Move to the child node for this letter (create it if it didn’t exist above)
-            node = node.Children[c];
+            
+            node = node.Children[index];
+            //node = node.Children[c];
         }
         
         // once finishing through the nodes for the word, clarify this is a word
